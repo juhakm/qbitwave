@@ -1,38 +1,27 @@
-# The Bitwave: Wavefunction Emergence from Zero Entropy
+# Bitwave
 
-The `Bitwave` class combining both the classical bitstring and the quantum wavefunction, fusing them into a single emergent entity.
+**A minimal informational model of quantum emergence.**
 
-## What is a Bitwave?
+`Bitwave` is a Python library for simulating quantum-like wavefunctions as emergent properties of binary strings. It unifies bitstrings, amplitudes, and entropy into a single foundational object.
 
-A **Bitwave** is a finite binary string that, through internal structure alone, gives rise to:
+## Key Concepts
 
-- Complex amplitudes (via internal encoding)
-- Phase relationships
-- Probabilistic behavior
-- Entropic growth over time
-- Emergent resolution (precision scales with entropy)
+- **Bit = Geometry**: Each bit encodes structure.
+- **Bitstring = Universe State**: A single bitstring describes a possible quantum universe.
+- **Bitwave = Wavefunction**: A discrete quantum object derived purely from bits.
 
-There is no external wavefunction imposed. All dynamics emerge **purely from the bit pattern**.
+## Features
 
-## How Does It Work?
+- Convert any bitstring into a complex amplitude vector
+- Extract |ψ|² and phase 
+- Measure entropy and emergent resolution
 
-At zero entropy, the Bitwave is a string of identical bits (e.g. `"000000"`). As bits flip, structure emerges. Interference, superposition, and amplitude variation are interpreted from patterns in the bitstring, not from a separately imposed Hilbert space.
 
-Key properties:
+## Example
 
-- **Amplitude**: Derived from blockwise structure within the bitstring.
-- **Phase**: Emerges from local differences between blocks.
-- **Entropy**: Computed from pattern complexity (e.g., Shannon entropy).
-- **Resolution**: Increases naturally as entropy rises; not externally imposed.
+```python
+from bitwave import Bitwave
 
-## Why Is This Powerful?
-
-It removes the need for predefined physics. Instead:
-
-- Reality begins as pure information (`""` or `"000..."`)
-- Physics emerges as an *interpretation* of structured information
-- The Bitwave is the minimal simulation-compatible unit of physical description
-
-This perspective aligns with your foundational principle:  
-> *All that exists is information. Physics is a readable pattern.*
-
+bw = Bitwave("1101010111001001")
+amplitudes = bw.get_amplitudes()
+entropy = bw.entropy()
