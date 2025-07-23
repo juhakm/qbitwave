@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+packages = ["qbitwave"]
+
+[project]
+name = "qbitwave"
+version = "0.1.0"
+description = "Discrete emergent wavefunction"
+readme = {file = "README.md", content-type = "text/markdown"}
+requires-python = ">=3.9"
+license = "MIT"
+keywords = ["physics", "quantum"]
+authors = [
+  {name = "Juha Meskanen", email = "juha@meskanen.com" }
+]
+maintainers = [
+  {name = "Juha Meskanen", email = "juha@meskanen.com" }
+]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development",
+  "Programming Language :: Python :: 3.9",
+]
+
+dependencies = [
+  "numpy >=1.24",
+  "matplotlib >=3.7",
+  "scipy >=1.10"]
+
+
+[project.optional-dependencies]
+dev = [
+  "check-manifest",
+  "types-pyz"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/juhakm/qbitwave"
+"Bug Reports" = "https://github.com/juhakm/qbitwave"
+"Funding" = "https://meskanen.com"
+"Say Thanks!" = "http://meskanen.com"
+"Source" = "https://github.com/juhakm/qbitwave"
+
+
+[tool.mypy]
+files = ["qbitwave/*.py", "examples/*.py"]
+ignore_missing_imports = false
+
+
+[tool.setuptools.package-data]
+"qbitwave" = ["py.typed"]
+
