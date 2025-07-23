@@ -34,12 +34,6 @@ dependencies = [
   "scipy >=1.10"]
 
 
-[project.optional-dependencies]
-dev = [
-  "check-manifest",
-  "types-pyz"
-]
-
 [project.urls]
 "Homepage" = "https://github.com/juhakm/qbitwave"
 "Bug Reports" = "https://github.com/juhakm/qbitwave"
