@@ -1,50 +1,79 @@
 import unittest
 import numpy as np
-from qbitwave import QBitwave
-
+from qbitwave.qbitwave import QBitwave 
 
 class TestQBitwave(unittest.TestCase):
+    """
+    Unit tests for the QBitwave class.
+    """
 
-    def test_initialization(self):
-        bw = QBitwave("010101")
-        self.assertIsInstance(bw.bitstring, str)
-        self.assertTrue(all(b in "01" for b in bw.bitstring))
+    def test_initialization_and_structure(self) -> None:
+        """
+        Test that the object initializes and block size is selected.
+        """
+        q = QBitwave("01011001100100101110101010101010")
+        self.assertIsInstance(q.get_amplitudes(), list)
+        self.assertGreater(q.num_states(), 0)
+        self.assertIsNotNone(q.get_selected_block_size())
 
-    def test_amplitudes_length(self):
-        bw = QBitwave("1100110011")
-        amplitudes = bw.get_amplitudes()
-        self.assertIsInstance(amplitudes, np.ndarray)
-        self.assertGreaterEqual(len(amplitudes), 1)
-        self.assertTrue(np.iscomplexobj(amplitudes))
+    def test_entropy_nonzero(self) -> None:
+        """
+        Test that entropy is computed and is nonzero for a meaningful bitstring.
+        """
+        q = QBitwave("01010101101010110101011100001111")
+        entropy: float = q.entropy()
+        self.assertGreater(entropy, 0.0)
+        self.assertLessEqual(entropy, np.log2(q.dimension()))
 
-    def test_amplitudes_normalization(self):
-        bw = QBitwave("1100110011")
-        amplitudes = bw.get_amplitudes()
-        prob_sum = np.sum(np.abs(amplitudes) ** 2)
-        self.assertAlmostEqual(prob_sum, 1.0, places=6)
+    def test_amplitude_normalization(self) -> None:
+        """
+        Ensure the L2 norm of the wavefunction is approximately 1.
+        """
+        q = QBitwave("11110000111100001111000011110000")
+        norm: float = q.norm()
+        self.assertAlmostEqual(norm, 1.0, places=5)
 
-    def test_entropy_increases_with_structure(self):
-        bw_low = QBitwave("0000000000")
-        bw_high = QBitwave("1011001010")
-        entropy_low = bw_low.entropy()
-        entropy_high = bw_high.entropy()
-        self.assertLess(entropy_low, entropy_high)
+    def test_probability_distribution_sum(self) -> None:
+        """
+        Test that the probability distribution sums to ~1.
+        """
+        q = QBitwave("00110011001100110011001100110011")
+        probs: np.ndarray = q.get_probability_distribution()
+        self.assertAlmostEqual(float(np.sum(probs)), 1.0, places=5)
 
-    def test_resolution_consistency(self):
-        bw = QBitwave("1011010110110101")
-        self.assertEqual(bw.resolution(), len(bw.get_amplitudes()))
+    def test_phase_distribution_shape(self) -> None:
+        """
+        Ensure phase distribution has same length as number of states.
+        """
+        q = QBitwave("10101010101010101010101010101010")
+        phases: np.ndarray = q.get_phase_distribution()
+        self.assertEqual(len(phases), q.dimension())
 
-    def test_entropy_bounds(self):
-        bw = QBitwave("00000000")
-        entropy = bw.entropy()
-        self.assertGreaterEqual(entropy, 0)
-        self.assertLessEqual(entropy, np.log2(bw.resolution() + 1e-10))  # entropy ≤ log2(n)
+    def test_str_output(self) -> None:
+        """
+        Check that __str__ returns a Dirac-style wavefunction string.
+        """
+        q = QBitwave("10110100101101001011010010110100")
+        wf_str: str = str(q)
+        self.assertIn("|", wf_str)  # check Dirac notation is used
+        self.assertIsInstance(wf_str, str)
 
-    def test_num_states(self):
-        bw = QBitwave("1010011101")
-        n = bw.num_states()
-        self.assertEqual(n, len(bw.get_amplitudes()))
-        self.assertGreater(n, 0)
+    def test_empty_amplitudes_for_short_input(self) -> None:
+        """
+        Test behavior for bitstrings too short to yield amplitudes.
+        """
+        q = QBitwave("10")  # too short for min_block_size=4
+        self.assertEqual(q.get_amplitudes(), [])
+
+
+    def test_rejects_zero_norm(self) -> None:
+        """
+        Check that all-zero wavefunctions are rejected.
+        """
+        # 16 zero bits would translate to real=0, imag=0 repeatedly
+        q = QBitwave("0" * 64)
+        self.assertEqual(q.get_amplitudes(), [])
+
 
 if __name__ == '__main__':
     unittest.main()
