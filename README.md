@@ -1,3 +1,8 @@
+
+[![PyPI version](https://badge.fury.io/py/qbitwave.svg)](https://badge.fury.io/py/qbitwave)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Tests](https://github.com/juhakm/qbitwave/actions/workflows/tests.yml/badge.svg)](https://github.com/juhakm/qbitwave/actions)
+
 # QBitwave
 
 **A minimal informational model of quantum emergence.**
