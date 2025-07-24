@@ -23,6 +23,9 @@ It unifies bitstrings, amplitudes, and entropy into a single foundational object
 - Extract |ψ|² and phase 
 - Measure entropy and emergent resolution
 
+## Images
+![Finite wavefunction](./images/qbitstr.png "Finite wavefunction")
+
 
 ## Example
 
@@ -34,5 +37,3 @@ amplitudes = bw.get_amplitudes()
 entropy = bw.entropy()
 
 
-## Images
-![Finite wavefunction](./images/qbitstr.png "Finite wavefunction")
