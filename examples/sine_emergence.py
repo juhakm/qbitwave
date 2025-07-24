@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from qbitwave import QBitwave
 
 
-# generate smooth highly compressible bitpattern
+
 def amplitude_to_bits(amplitude: float, block_size: int) -> list[int]:
     max_int = 2**block_size - 1
     int_val = int(round(amplitude * max_int))
@@ -25,7 +25,7 @@ def main():
     num_samples : int = 128
     block_size : int = 64
 
-    # start out something smooth
+    # start out something smooth, highly compressible bitpattern
     bitstring = generate_sine_bitstring(num_samples, block_size)
     qbit = QBitwave(bitstring)
 
