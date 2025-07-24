@@ -35,8 +35,8 @@ def decode_bitstring_manual(bitstring: list[int], block_size: int) -> np.ndarray
 
 
 def run_test_matrix():
-    block_sizes = [4, 8, 16, 32]
-    sample_counts = [16, 32, 64, 128]
+    block_sizes = [4, 32]
+    sample_counts = [16, 128]
 
     fig, axes = plt.subplots(len(block_sizes), len(sample_counts), figsize=(16, 12))
     fig.suptitle("QBitwave vs Manual Decode vs Original Sine", fontsize=16)
@@ -65,6 +65,7 @@ def run_test_matrix():
     handles, labels = ax.get_legend_handles_labels()
     fig.legend(handles, labels, loc='upper right')
     plt.tight_layout(rect=[0, 0, 0.97, 0.95])
+    plt.savefig("qbitwave.png", dpi=300)
     plt.show()
     print("Done")
 
