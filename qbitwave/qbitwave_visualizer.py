@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from wavefunction import QBitwave
+from qbitwave import QBitwave
 
 class QBitwaveVisualizer:
     def __init__(self, wavefunction: QBitwave):

@@ -1,0 +1,76 @@
+\section{Interpretation Space of a Bitstring Universe}
+
+\subsection{Bitstring as Invariant Substrate}
+
+Let
+\[
+B \in \{0,1\}^N
+\]
+be a finite binary string of length \( N \). This bitstring represents the fundamental information substrate of a universe, invariant across interpretations.
+
+\subsection{Interpretation Function}
+
+We define an \emph{interpretation} (or observer decoding scheme) as a function
+\[
+\mathcal{I}: \{0,1\}^N \rightarrow \mathcal{H}
+\]
+where \( \mathcal{H} \) is a Hilbert space of complex-valued vectors, i.e., possible wavefunctions.
+
+Each interpretation consists of:
+\begin{itemize}
+  \item \textbf{Block size} \( k \in \mathbb{Z}^+ \): how many bits to group per amplitude.
+  \item \textbf{Parsing rule} \( P \): maps bit blocks into complex amplitudes.
+  \item \textbf{Domain mapping} \( D \): assigns amplitudes to positions (e.g., spatial or phase).
+  \item \textbf{Normalization} \( N \): scales wavefunction to satisfy norm constraints.
+\end{itemize}
+
+Thus, the interpretation becomes:
+\[
+\mathcal{I}_{k,P,D,N}: B \mapsto \Psi_B
+\]
+with output \( \Psi_B \in \mathbb{C}^M \), where \( M = N / k \).
+
+\subsection{Observer Class and Interpretation Space}
+
+Let \( \mathcal{O} \) denote the space of all interpretations an observer might apply:
+\[
+\mathcal{O} = \left\{ \mathcal{I}_{k,P,D,N} \,\middle|\, k, P, D, N \text{ admissible} \right\}
+\]
+Each \( \mathcal{I} \in \mathcal{O} \) represents a unique physical reality consistent with the same bitstring \( B \).
+
+\subsection{Equivalence of Interpretations}
+
+We define observational equivalence as:
+\[
+\mathcal{I}_1 \sim \mathcal{I}_2 \iff \left| \mathcal{I}_1(B) \right|^2 = \left| \mathcal{I}_2(B) \right|^2
+\]
+This identifies equivalence classes over \( \mathcal{O} \), where different decoding rules yield indistinguishable outcomes.
+
+\subsection{Emergence and Optimality}
+
+Define a scoring function to quantify structure:
+\[
+S(\mathcal{I}, B) = H(\Psi_B)
+\]
+where \( H \) is a structure or entropy-based metric. Then the \emph{emergent interpretation} is:
+\[
+\mathcal{I}^* = \arg\max_{\mathcal{I} \in \mathcal{O}} S(\mathcal{I}, B)
+\]
+
+This formulation justifies why certain block sizes or structures \emph{emerge} naturally: they maximize the informational yield from \( B \).
+
+\subsection{Summary of Symbols}
+
+\begin{center}
+\begin{tabular}{ll}
+Symbol & Description \\
+\hline
+\( B \) & Raw bitstring (substrate) \\
+\( \mathcal{I} \) & Interpretation function (observer's decoding) \\
+\( \mathcal{O} \) & Set of all possible interpretations \\
+\( \Psi_B \) & Wavefunction derived from \( B \) via \( \mathcal{I} \) \\
+\( H \) & Entropy or structure score \\
+\( \mathcal{I}^* \) & Optimal interpretation maximizing \( H \) \\
+\( \sim \) & Observational equivalence relation \\
+\end{tabular}
+\end{center}

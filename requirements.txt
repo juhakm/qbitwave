@@ -1,6 +1,7 @@
 numpy
 matplotlib
 scipy
+numba
 
 twine
 build
