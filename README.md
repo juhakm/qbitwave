@@ -24,7 +24,7 @@ It unifies bitstrings, amplitudes, and entropy into a single foundational object
 - Measure entropy and emergent resolution
 
 ## Images
-![Finite wavefunction](./images/qbitstr.png "Finite wavefunction")
+![Finite wavefunction](https://github.com/juhakm/qbitwave/blob/main/images/qbitwave.png "Finite wavefunction")
 
 
 ## Example
@@ -35,5 +35,6 @@ from qbitwave import QBitwave
 bw = QBitwave("1101010111001001")
 amplitudes = bw.get_amplitudes()
 entropy = bw.entropy()
+```
 
 
