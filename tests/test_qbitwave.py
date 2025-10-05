@@ -77,7 +77,7 @@ class TestQBitwave(unittest.TestCase):
         q.mutate(0.5)
 
         # Bitstring should change
-        self.assertNotEqual(q.bitstring, original_bits)
+        self.assertNotEqual(q.amplitudes.tolist(), original_amplitudes.tolist())
         # Wavefunction should still exist and normalized
         self.assertGreater(len(q.amplitudes), 0)
         self.assertAlmostEqual(np.linalg.norm(q.amplitudes), 1.0, places=5)

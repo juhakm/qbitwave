@@ -39,8 +39,7 @@ dependencies = [
 [project.urls]
 "Homepage" = "https://github.com/juhakm/qbitwave"
 "Bug Reports" = "https://github.com/juhakm/qbitwave"
-"Funding" = "https://meskanen.com"
-"Say Thanks!" = "http://meskanen.com"
+"Say Thanks!" = "https://github.com/juhakm/qbitwave"
 "Source" = "https://github.com/juhakm/qbitwave"
 
 

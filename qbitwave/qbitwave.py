@@ -1,6 +1,6 @@
 """
-QBitwave: Wavefunction-Centric Extension
-========================================
+QBitwave: Wavefunction as an Emergent Information-Theoretic Object
+==================================================================
 
 This module defines the QBitwave class, which treats the wavefunction
 as an emergent, information-theoretic object. The bitstring is a
