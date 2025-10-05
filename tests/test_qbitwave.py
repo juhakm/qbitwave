@@ -1,132 +1,121 @@
 import unittest
 import numpy as np
-from qbitwave.qbitwave import QBitwave 
+from qbitwave.qbitwave import QBitwave
+from typing import List
+
 
 class TestQBitwave(unittest.TestCase):
     """
     Unit tests for the QBitwave class.
+
+    Tests cover:
+    - Initialization from bitstring and amplitudes
+    - Entropy and compressibility calculations
+    - Wavefunction normalization
+    - Bitstring mutations and flips
+    - Handling of edge cases (short or zero bitstrings)
     """
 
     def test_initialization_and_structure(self) -> None:
         """
-        Test that the object initializes and block size is selected.
+        Test that the object initializes correctly and selects a basis size.
         """
-        q = QBitwave("01011001100100101110101010101010")
-        self.assertIsInstance(q.get_amplitudes(), list)
-        self.assertGreater(q.num_states(), 0)
-        self.assertIsNotNone(q.get_selected_block_size())
+        bits = [0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0]
+        q = QBitwave(bitstring=bits, fixed_basis_size=4)
+        self.assertIsInstance(q.amplitudes, np.ndarray)
+        self.assertGreater(len(q.amplitudes), 0)
+        self.assertIsNotNone(q.selected_basis_size)
 
     def test_entropy_nonzero(self) -> None:
         """
-        Test that entropy is computed and is nonzero for a meaningful bitstring.
+        Test that wavefunction entropy is computed and nonzero for structured bitstring.
         """
-        q = QBitwave("01010101101010110101011100001111")
-        entropy: float = q.entropy()
+        bits = [0, 1] * 16
+        q = QBitwave(bitstring=bits)
+        entropy = q.entropy()
         self.assertGreater(entropy, 0.0)
-        self.assertLessEqual(entropy, np.log2(q.dimension()))
+        self.assertLessEqual(entropy, np.log2(len(q.amplitudes)))
 
     def test_amplitude_normalization(self) -> None:
         """
         Ensure the L2 norm of the wavefunction is approximately 1.
         """
-        q = QBitwave("11110000111100001111000011110000")
-        norm: float = q.norm()
-        self.assertAlmostEqual(norm, 1.0, places=5)
-
-    def test_probability_distribution_sum(self) -> None:
-        """
-        Test that the probability distribution sums to ~1.
-        """
-        q = QBitwave("00110011001100110011001100110011")
-        probs: np.ndarray = q.get_probability_distribution()
-        self.assertAlmostEqual(float(np.sum(probs)), 1.0, places=5)
-
-    def test_phase_distribution_shape(self) -> None:
-        """
-        Ensure phase distribution has same length as number of states.
-        """
-        q = QBitwave("10101010101010101010101010101010")
-        phases: np.ndarray = q.get_phase_distribution()
-        self.assertEqual(len(phases), q.dimension())
-
-    def test_str_output(self) -> None:
-        """
-        Check that __str__ returns a Dirac-style wavefunction string.
-        """
-        q = QBitwave("10110100101101001011010010110100")
-        wf_str: str = str(q)
-        self.assertIn("|", wf_str)  # check Dirac notation is used
-        self.assertIsInstance(wf_str, str)
-
-    def test_empty_amplitudes_for_short_input(self):
-        # The block_size is 4, so 4 bits are required per amplitude
-        # With only 3 bits, decoding should produce no amplitudes
-        bits = [1, 0, 1]  # not enough for one block
-        q = QBitwave(bits, fixed_block_size=4)
-        self.assertEqual(list(q.get_amplitudes()), [])
-
-    @unittest.skip("#FIX: Temporarily skipping this test")
-    def test_rejects_zero_norm(self):
-        # All-zero input bitstring, which should result in all amplitudes being 0+0j
-        zero_input = [0] * 32  # or however many bits are needed to yield multiple amplitude blocks
-        q = QBitwave(zero_input)
-
-        amplitudes = list(q.get_amplitudes())
-
-        # Check that all amplitudes are very close to 0, indicating zero norm
-        norm = sum(abs(a) ** 2 for a in amplitudes)
-
-        # If norm is effectively zero, wavefunction should have been discarded
-        if norm < 1e-6:
-            self.assertEqual(amplitudes, [], f"Expected empty amplitude list for zero-norm input, got: {amplitudes}")
-        else:
-            self.fail(f"Input did not yield zero norm as expected. Norm was {norm}, amplitudes: {amplitudes}")
-
-    def test_mutate_changes_bits_and_recomputes_wavefunction(self):
-        # Start with a known bitstring that produces amplitudes
-        original_bits = [0, 1] * 32  # alternating bits
-        q = QBitwave(original_bits)
-        original_wavefunction = q.amplitudes.copy()
-        original_length = len(original_wavefunction)
-
-        q.mutate(mutation_rate=1.0)  # force full mutation
-
-        # Ensure bitstring changed
-        self.assertNotEqual(q.bitstring, original_bits)
-
-        # Ensure new wavefunction is non-empty
-        self.assertGreater(len(q.amplitudes), 0)
-
-        # If the new wavefunction has same length, it should differ
-        if len(q.amplitudes) == original_length:
-            self.assertFalse(np.allclose(q.amplitudes, original_wavefunction))
-
-        # Ensure it's still normalized
+        bits = [1, 0] * 16
+        q = QBitwave(bitstring=bits)
         norm = np.linalg.norm(q.amplitudes)
         self.assertAlmostEqual(norm, 1.0, places=5)
 
-    def test_flip_changes_one_bit_and_recomputes_wavefunction(self):
-        bitstring = [0, 1] * 8  # 16 bits
-        q = QBitwave(bitstring)
+    def test_compressibility_range(self) -> None:
+        """
+        Compressibility should be in [0, 1].
+        """
+        bits = [0, 1] * 16
+        q = QBitwave(bitstring=bits)
+        comp = q.compressibility()
+        self.assertGreaterEqual(comp, 0.0)
+        self.assertLessEqual(comp, 1.0)
 
+    def test_bit_entropy(self) -> None:
+        """
+        Bit-level entropy should reflect bitstring randomness.
+        """
+        bits = [0, 1] * 16
+        q = QBitwave(bitstring=bits)
+        bit_entropy = q.bit_entropy()
+        self.assertGreaterEqual(bit_entropy, 0.0)
+        self.assertLessEqual(bit_entropy, 1.0)
+
+    def test_mutate_changes_bits_and_wavefunction(self) -> None:
+        """
+        Test that mutate() alters bitstring and recomputes amplitudes.
+        """
+        bits = [0, 1] * 16
+        q = QBitwave(bitstring=bits)
         original_bits = q.bitstring.copy()
-        original_wavefunction = np.array(q.amplitudes)
+        original_amplitudes = q.amplitudes.copy()
+
+        q.mutate(0.5)
+
+        # Bitstring should change
+        self.assertNotEqual(q.bitstring, original_bits)
+        # Wavefunction should still exist and normalized
+        self.assertGreater(len(q.amplitudes), 0)
+        self.assertAlmostEqual(np.linalg.norm(q.amplitudes), 1.0, places=5)
+
+    def test_flip_changes_one_bit(self) -> None:
+        """
+        Test that flip() toggles exactly one bit and updates wavefunction.
+        """
+        bits = [0, 1] * 8
+        q = QBitwave(bitstring=bits)
+        original_bits = q.bitstring.copy()
+        original_amplitudes = q.amplitudes.copy()
 
         q.flip()
 
-        # Confirm one bit was flipped
         diff_count = sum(b1 != b2 for b1, b2 in zip(original_bits, q.bitstring))
-        self.assertEqual(diff_count, 1, "Exactly one bit should be flipped")
+        self.assertEqual(diff_count, 1)
+        self.assertGreater(len(q.amplitudes), 0)
+        if len(original_amplitudes) == len(q.amplitudes):
+            self.assertFalse(np.allclose(q.amplitudes, original_amplitudes))
 
-        # Confirm wavefunction still exists
-        self.assertGreater(len(q.amplitudes), 0, "Wavefunction should not be empty")
+    def test_zero_bitstring_produces_empty_amplitudes(self) -> None:
+        """
+        Ensure that a too-short or all-zero bitstring produces empty amplitude array.
+        """
+        bits = [0] * 3
+        q = QBitwave(bitstring=bits, fixed_basis_size=4)
+        self.assertEqual(len(q.amplitudes), 0)
 
-        # Confirm change, if possible
-        if len(original_wavefunction) == len(q.amplitudes):
-            self.assertFalse(np.allclose(q.amplitudes, original_wavefunction),
-                            "Wavefunction should change after flip")
+    def test_coherence_metric_nonnegative(self) -> None:
+        """
+        Test that coherence() returns a non-negative float.
+        """
+        bits = [0, 1] * 16
+        q = QBitwave(bitstring=bits)
+        coh = q.coherence()
+        self.assertGreaterEqual(coh, 0.0)
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

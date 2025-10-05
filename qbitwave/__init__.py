@@ -1,7 +1,8 @@
 from .qbitwave import QBitwave
-from .qbitwave_visualizer import QBitwaveVisualizer
+from .qbitwavend import QBitwaveND
+
 
 __all__ = [
     "QBitwave",
-    "QBitwaveVisualizer",
+    "QBitwaveND"
 ]
