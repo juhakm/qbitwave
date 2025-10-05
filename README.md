@@ -103,9 +103,9 @@ P = qn.probability(0.2, t=0.5)
 
 ## Images
 
-<img width="1299" height="599" alt="compressibility" src="https://github.com/user-attachments/assets/3086378c-13f8-49b5-9591-6d978713c73f" />
-<img width="999" height="599" alt="compressibility_entropy" src="https://github.com/user-attachments/assets/03fc8b75-d9f7-45d7-8348-b5eefacd6d36" />
-<img width="639" height="479" alt="photon_heatmap" src="https://github.com/user-attachments/assets/93d06be8-c31b-4a04-b62d-32fad4110f56" />
-<img width="4800" height="3600" alt="qbitwave" src="https://github.com/user-attachments/assets/a40b67c6-7432-4e78-b2a0-18a8e4c0ccd4" />
+<img width="640" height="400" alt="compressibility" src="https://github.com/user-attachments/assets/3086378c-13f8-49b5-9591-6d978713c73f" />
+<img width="640" height="400" alt="compressibility_entropy" src="https://github.com/user-attachments/assets/03fc8b75-d9f7-45d7-8348-b5eefacd6d36" />
+<img width="640" height="400" alt="photon_heatmap" src="https://github.com/user-attachments/assets/93d06be8-c31b-4a04-b62d-32fad4110f56" />
+<img width="640" height="400" alt="qbitwave" src="https://github.com/user-attachments/assets/a40b67c6-7432-4e78-b2a0-18a8e4c0ccd4" />
 
 
