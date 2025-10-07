@@ -1,9 +1,10 @@
 # QBitwave: Emergent Information-Theoretic Wavefunctions
 
-The **QBitwave** project unifies classical bitstrings and emergent wavefunctions into a single, information-centric framework.  
-From raw binary data, complex amplitudes, phases, and probabilistic dynamics naturally emerge.  
-The multidimensional extension, **QBitwaveND**, allows these structures to evolve dynamically in time, forming a complete informational pipeline.
-
+QBitwave models quantum-like dynamics as the deterministic evolution of compressibility in finite bitstrings.
+The wavefunction ψ is interpreted not as a physical field but as the minimal compression algorithm that reproduces a given informational state.
+Existence corresponds to self-compressibility — only compressible configurations persist.
+Through Fourier-domain transformations and entropy measures, QBitwave unifies bitstrings, complex amplitudes, and probabilistic behavior into a single information-centric framework.
+Its N-dimensional extension, QBitwaveND, provides unitary evolution of informational wavefunctions in time, forming a complete bridge between algorithmic information and emergent dynamics.
 
 ## Core Concept
 
