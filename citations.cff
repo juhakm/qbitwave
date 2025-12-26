@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: "If you use this software in academic work, please cite it as below."
+title: "QBitwave: Information-Theoretic Wavefunction Reconstruction"
+type: software
+authors:
+  - family-names: "Meskanen"
+    given-names: "Juha"
+    orcid: ""   # optional, can be added later
+repository-code: "https://github.com/juhakm/qbitwave"
+url: "https://github.com/juhakm/qbitwave"
+license: "MIT"
+keywords:
+  - quantum field theory
+  - information theory
+  - wavefunction emergence
+  - algorithmic compression
+  - ultraviolet regularization
+  - computational physics
+abstract: >
+  QBitwave is a Python framework for reconstructing quantum wavefunctions
+  from discrete bitstring configurations using information-theoretic
+  compression principles. The wavefunction is treated as an emergent,
+  minimal (or near-minimal) program encoding the underlying configuration,
+  with amplitude norms defining physical measure. The framework provides
+  a natural suppression of ultraviolet divergences without imposing
+  external cutoffs, and is intended for research in quantum foundations,
+  information-theoretic physics, and computational field theory.
+version: "0.1.0"
+date-released: "2025-01-01"
+preferred-citation:
+  type: software
+  authors:
+    - family-names: "Meskanen"
+      given-names: "Juha"
+  title: "QBitwave: Information-Theoretic Wavefunction Reconstruction"
+  year: 2025
+  url: "https://github.com/juhakm/qbitwave"

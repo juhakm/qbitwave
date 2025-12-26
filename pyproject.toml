@@ -8,12 +8,24 @@ packages = ["qbitwave"]
 
 [project]
 name = "qbitwave"
-version = "0.2.1"
-description = "Discrete emergent wavefunction"
+version = "0.2.2"
+description = "Information-theoretic reconstruction of quantum wavefunctions from discrete bitstrings"
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.9"
 license = "MIT"
-keywords = ["physics", "quantum"]
+
+keywords = [
+  "quantum",
+  "quantum-field-theory",
+  "information-theory",
+  "wavefunction",
+  "emergent-physics",
+  "algorithmic-complexity",
+  "computational-physics",
+  "ultraviolet-regularization"
+]
+
+
 authors = [
   {name = "Juha Meskanen", email = "juha@meskanen.com" }
 ]
@@ -22,11 +34,31 @@ maintainers = [
 ]
 
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Topic :: Software Development",
+  # Development maturity
+  "Development Status :: 4 - Beta",
+
+  # Intended audience
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Education",
+
+  # Topic classification
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Scientific/Engineering :: Mathematics",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+
+  # Programming language
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+
+  # Typing / implementation
+  "Typing :: Typed",
+  "Operating System :: OS Independent",
 ]
+
 
 dependencies = [
  "numpy>=1.25,<1.27",

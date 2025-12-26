@@ -2,7 +2,7 @@
 
 The **QBitwave** project unifies classical bitstrings and emergent wavefunctions into a single, information-centric framework.  
 From raw binary data, complex amplitudes, phases, and probabilistic dynamics naturally emerge.  
-The multidimensional extension, **QBitwaveND**, allows these structures to evolve dynamically in time, forming a complete informational pipeline.
+The multidimensional extension, **QBitwaveND**, allows these structures to evolve dynamically in time, forming a complete informational pipeline (experimental)
 
 
 ## Core Concept
@@ -71,18 +71,16 @@ A finite bitstring encodes a discretized wavefunction, which can be reconstructe
 - `evaluate(*coords, t=0.0)` : compute ψ(x, t) at arbitrary coordinates  
 - `probability(*coords, t=0.0)` : return |ψ(x, t)|² (Born-rule analog)  
 
-
-
 ## Why It Matters
 
-- Removes the need for predefined physics: the wavefunction emerges **from information alone**  
-- Bitstring = minimal unit of physical description  
-- Amplitudes, phases, probability, and dynamics all derive from the **internal structure of the bitstring**  
-- QBitwave → static emergence, QBitwaveND → dynamic evolution, together forming a **complete informational pipeline**
+- Information as primary ontology: All physical phenomena are encoded by minimal informational descriptions; spacetime, fields, and quantum dynamics are derived, not assumed.
+- Compressibility replaces renormalization: High-frequency modes that contribute divergences in conventional QFT are interpreted as incompressible configurations with vanishing physical measure, providing a natural regularization.
+- Singularities as structureless limits: Zero execution-trace entropy indicates collapse of all distinguishable geometric degrees of freedom, eliminating the need to treat singularities as breakdowns of physics.
 
+## Source code
+- https://github.com/juhakm/qbitwave
 
-
-## 🌀 Example Usage
+## Example Usage
 
 ```python
 from qbitwave import QBitwave, QBitwaveND

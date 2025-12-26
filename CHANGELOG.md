@@ -1,5 +1,18 @@
 # CHANGELOG.md
 
+
+## Version 0.2.3 — "Citation.cff added"
+**Date:** 2025-12-26
+**pyproject.toml:** Keywords updated, version elevated.
+**citations.cff:** file added
+
+
+## Version 0.2.2 — "Wavefunction-Centric Rewrite"
+**Date:** 2025-10-19
+**Core Concept:** Failing unit test fixed.
+
+
+
 ## Version 0.2.1 — "Wavefunction-Centric Rewrite"
 **Date:** 2025-10-04
 **Core Concept:** Quantum behavior emerges statistically from information compressibility.

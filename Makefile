@@ -19,7 +19,7 @@ upload:
 	@python3 -m twine upload --repository pypi dist/* --verbose
 
 clean:
-	@python3 ./clean.py
+	@rm dist/*
 
 unittest:
 	@python3 -m unittest discover
