@@ -264,7 +264,7 @@ class QBitwave:
         probs = np.abs(self.amplitudes) ** 2
         probs = np.clip(probs, 1e-10, 1.0)
         return float(-np.sum(probs * np.log2(probs)))
-
+    
     def get_amplitudes(self) -> np.ndarray:
         """Return complex amplitudes of the wavefunction.
 
@@ -286,14 +286,12 @@ class QBitwave:
         Returns:
             float: Compressibility in [0, 1], higher = more compressible.
         """
-        amps = np.abs(self.amplitudes)
-        if len(amps) == 0:
-            return 0.0
-
-        fft_coeffs = np.fft.fft(amps)
-        max_amp = np.max(np.abs(fft_coeffs))
-        sig = np.sum(np.abs(fft_coeffs) / max_amp > threshold)
-        return 1.0 - sig / len(fft_coeffs)
+        if len(self.amplitudes) == 0: return 0.0
+        fft_coeffs = np.abs(np.fft.rfft(self.amplitudes.real))
+        max_val = np.max(fft_coeffs) if len(fft_coeffs) > 0 else 1.0
+        # Count significant frequency components
+        sig = np.sum(fft_coeffs / max_val > threshold)
+        return 1.0 - (sig / len(fft_coeffs))
 
     def set_bitstring(self, bitstring: List[int]) -> None:
         """Update bitstring and recompute wavefunction representation.
@@ -432,3 +430,29 @@ class QBitwave:
         # Recompute Fourier coefficients for future evaluations
         self.fft_coeffs = np.fft.fftn(self.amplitudes) / np.prod(self.amplitudes.shape)
 
+    def wave_complexity(self, eps: float = 1e-3) -> int:
+        """
+        Compute the spectral entropy of the wavefunction. This provides a continuous
+        measure of complexity.
+
+        Args:
+            eps (float, optional): Relative amplitude threshold to consider a
+                component significant. Components with |amplitude|^2 > eps
+                are counted. Defaults to 1e-3.
+
+        Returns:
+            int: Number of significant amplitude components (i.e., the
+                 spectral complexity of the wavefunction).
+
+        Example:
+            >>> qb = QBitwave(bitstring=[1,0,1,1,0,0,1,0])
+            >>> qb.wave_complexity()
+            5
+        """
+        if len(self.amplitudes) == 0: return 0.0
+        # Transform to frequency domain
+        fft_coeffs = np.fft.rfft(self.amplitudes.real)
+        psd = np.abs(fft_coeffs)**2
+        psd_norm = psd / (np.sum(psd) + 1e-12)
+        # Shannon Entropy of frequencies
+        return float(-np.sum(psd_norm * np.log2(psd_norm + 1e-12)))

@@ -1,5 +1,18 @@
 # CHANGELOG.md
 
+## Version 0.2.5 — **Improvements**:
+
+- Spectral Transition: In the original code, wave_complexity counted spatial blocks. It now counts Spectral Entropy. 
+- Normalization Stability: The compressibility method now uses np.fft.rfft on the real part of the reconstructed amplitudes.
+
+
+## Version 0.2.4 — **QBitwave.wave_complexity(eps=1e-3)**:
+  Computes the spectral complexity of the wavefunction by counting the number of significant amplitude components above a threshold.
+  - Provides an intuitive measure of compressibility and algorithmic complexity of a bitstring’s wavefunction representation.
+  - Smooth or regular bitstrings yield lower complexity; noisy or irregular bitstrings yield higher complexity.
+  - Fully compatible with `QBitwave`'s amplitude normalization and Fourier-based analysis.
+  - Returns a native Python `int` for compatibility with unit tests and downstream applications.
+
 
 ## Version 0.2.3 — "Citation.cff added"
 **Date:** 2025-12-26

@@ -116,6 +116,40 @@ class TestQBitwave(unittest.TestCase):
         coh = q.coherence()
         self.assertGreaterEqual(coh, 0.0)
 
+def test_wave_complexity_entropy_behavior(self) -> None:
+        """
+        Test that wave_complexity() returns spectral entropy (float)
+        and correctly identifies that random noise is more complex 
+        than structured patterns.
+        """
+        # 1. Structured bitstring (low entropy/complexity)
+        # [0, 1] repeated is a very simple, predictable wave.
+        bits_structured = [0, 1] * 32
+        q_struct = QBitwave(bitstring=bits_structured)
+        comp_struct = q_struct.wave_complexity()
+        
+        self.assertIsInstance(comp_struct, float)
+        
+        # 2. Random bitstring (high entropy/complexity)
+        # Random bits should always yield a higher entropy than a pure cycle.
+        bits_random = np.random.randint(0, 2, 64).tolist()
+        q_rand = QBitwave(bitstring=bits_random)
+        comp_rand = q_rand.wave_complexity()
+        
+        self.assertIsInstance(comp_rand, float)
+        
+        # 3. Validation: Structure < Random
+        self.assertLess(comp_struct, comp_rand, 
+            f"Structured complexity ({comp_struct}) should be less than random ({comp_rand})")
+
+        # 4. Edge case: empty amplitudes
+        q_empty = QBitwave(bitstring=[0]*4, fixed_basis_size=8)
+        self.assertEqual(q_empty.wave_complexity(), 0.0)
+
+        # 5. Shannon Limit check
+        # Complexity should never exceed log2 of the number of available frequency bins
+        h_max = np.log2(len(q_rand.amplitudes)) + 0.01 # allow tiny epsilon
+        self.assertLessEqual(comp_rand, h_max)
 
 if __name__ == "__main__":
     unittest.main()

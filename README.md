@@ -3,7 +3,7 @@
 QBitwave models quantum-like dynamics as the deterministic evolution of compressibility in finite bitstrings.
 The wavefunction ψ is interpreted not as a physical field but as the minimal compression algorithm that
 reproduces a given informational state.
-Existence corresponds to self-compressibility — only compressible configurations persist.
+Existence corresponds to compressibility — most compressible configurations dominate.
 Through Fourier-domain transformations and entropy measures, QBitwave unifies bitstrings, complex amplitudes, and probabilistic
 behavior into a single information-centric framework.
 
