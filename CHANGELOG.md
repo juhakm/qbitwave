@@ -1,5 +1,12 @@
 # CHANGELOG.md
 
+
+## Version 0.2.6 — **Fixes to docstrings**:
+
+- Obsolete parameter from mutate() method removed
+- Wrong type annotations in docstrings fixed.
+
+
 ## Version 0.2.5 — **Improvements**:
 
 - Spectral Transition: In the original code, wave_complexity counted spatial blocks. It now counts Spectral Entropy. 

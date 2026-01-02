@@ -273,25 +273,21 @@ class QBitwave:
         """
         return self.amplitudes
 
+
     def compressibility(self, threshold: float = 0.01) -> float:
-        """Fourier-based compressibility measure of the wavefunction.
-
-        Fewer significant Fourier components → higher compressibility → more
-        predictable, smooth information.
-
-        Args:
-            threshold (float): Relative amplitude threshold to count significant
-                               Fourier components.
-
-        Returns:
-            float: Compressibility in [0, 1], higher = more compressible.
         """
-        if len(self.amplitudes) == 0: return 0.0
+        Fourier-based compressibility measure. Matches the Born Rule suppression.
+        """
+        if len(self.amplitudes) == 0: 
+            return 0.0
+            
         fft_coeffs = np.abs(np.fft.rfft(self.amplitudes.real))
         max_val = np.max(fft_coeffs) if len(fft_coeffs) > 0 else 1.0
-        # Count significant frequency components
+        
+        # Ratio of significant modes to total possible modes
         sig = np.sum(fft_coeffs / max_val > threshold)
         return 1.0 - (sig / len(fft_coeffs))
+
 
     def set_bitstring(self, bitstring: List[int]) -> None:
         """Update bitstring and recompute wavefunction representation.
@@ -418,41 +414,46 @@ class QBitwave:
         Dkl = np.sum(P_bits * np.log2(P_bits / P_psi))
         return float(max(0.0, Dkl))
 
-    def mutate(self, level=0.01):
+    def mutate(self, level: float = 0.01):
         """
-        Apply small complex noise to amplitudes, simulating informational drift.
-        This increases entropy while preserving normalization.
+        Apply small complex noise to amplitudes.
+        Updated to ensure internal state remains consistent.
         """
+        if len(self.amplitudes) == 0:
+            return
+            
         noise = (np.random.randn(*self.amplitudes.shape) +
-                1j * np.random.randn(*self.amplitudes.shape))
+                 1j * np.random.randn(*self.amplitudes.shape))
         self.amplitudes += level * noise
-        self.amplitudes /= np.linalg.norm(self.amplitudes)
-        # Recompute Fourier coefficients for future evaluations
-        self.fft_coeffs = np.fft.fftn(self.amplitudes) / np.prod(self.amplitudes.shape)
+        
+        norm = np.linalg.norm(self.amplitudes)
+        if norm > 0:
+            self.amplitudes /= norm
+            
+        # Update phases to match new amplitudes
+        self.phases = np.angle(self.amplitudes)
+        # Note: In a pure bit-substrate model, you might want to 
+        # re-sync the bitstring here using to_bitstring().
 
-    def wave_complexity(self, eps: float = 1e-3) -> int:
+    def wave_complexity(self) -> float:
         """
-        Compute the spectral entropy of the wavefunction. This provides a continuous
-        measure of complexity.
-
-        Args:
-            eps (float, optional): Relative amplitude threshold to consider a
-                component significant. Components with |amplitude|^2 > eps
-                are counted. Defaults to 1e-3.
-
+        Compute the spectral complexity of the wavefunction using Shannon Entropy.
+        
+        This aligns the informational cost with the Euclidean Action.
         Returns:
-            int: Number of significant amplitude components (i.e., the
-                 spectral complexity of the wavefunction).
-
-        Example:
-            >>> qb = QBitwave(bitstring=[1,0,1,1,0,0,1,0])
-            >>> qb.wave_complexity()
-            5
+            float: Spectral entropy in bits.
         """
-        if len(self.amplitudes) == 0: return 0.0
-        # Transform to frequency domain
+        if len(self.amplitudes) == 0: 
+            return 0.0
+            
+        # 1. Focus on the frequency domain (The Wavefunction)
         fft_coeffs = np.fft.rfft(self.amplitudes.real)
         psd = np.abs(fft_coeffs)**2
         psd_norm = psd / (np.sum(psd) + 1e-12)
-        # Shannon Entropy of frequencies
-        return float(-np.sum(psd_norm * np.log2(psd_norm + 1e-12)))
+        
+        # 2. Compute entropy: H = -sum(p * log2(p))
+        entropy = -np.sum(psd_norm * np.log2(psd_norm + 1e-12))
+        
+        # 3. Guard against negative zero artifacts and return float
+        return float(max(0.0, entropy))
+    
