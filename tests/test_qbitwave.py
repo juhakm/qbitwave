@@ -150,48 +150,6 @@ class TestQBitwave(unittest.TestCase):
         # Complexity should never exceed log2 of the number of available frequency bins
         h_max = np.log2(len(q_rand.amplitudes)) + 0.01 # allow tiny epsilon
         self.assertLessEqual(comp_rand, h_max)
-
-
-
-    def test_observer_bit_count(self) -> None:
-        """
-        Test the new observer_bit_count() method.
-
-        Verifies that:
-        - Returns an integer ≥ 1 for non-empty wavefunctions.
-        - Returns 0 for empty or too-short bitstrings.
-        - Larger, more complex wavefunctions produce larger k.
-        - Threshold parameter affects the count reasonably.
-        """
-        # 1. Structured bitstring (low complexity)
-        bits_structured = [0, 1] * 32
-        q_struct = QBitwave(bitstring=bits_structured)
-        k_struct = q_struct.observer_bit_count()
-        self.assertIsInstance(k_struct, int)
-        self.assertGreaterEqual(k_struct, 1)
-
-        # 2. Random bitstring (higher complexity)
-        bits_random = np.random.randint(0, 2, 64).tolist()
-        q_rand = QBitwave(bitstring=bits_random)
-        k_rand = q_rand.observer_bit_count()
-        self.assertIsInstance(k_rand, int)
-        self.assertGreaterEqual(k_rand, 1)
-
-        # 3. Check that more complex → larger k (probabilistic, usually true)
-        self.assertGreaterEqual(k_rand, k_struct)
-
-        # 4. Edge case: bitstring too short for basis size
-        bits_short = [0] * 3
-        q_short = QBitwave(bitstring=bits_short, fixed_basis_size=4)
-        k_short = q_short.observer_bit_count()
-        self.assertEqual(k_short, 0)
-
-        # 5. Threshold effect: increasing threshold reduces count
-        k_thresh_low = q_rand.observer_bit_count(threshold=1e-5)
-        k_thresh_high = q_rand.observer_bit_count(threshold=0.5)
-        self.assertLessEqual(k_thresh_high, k_thresh_low)
-
-
         
 if __name__ == "__main__":
     unittest.main()

@@ -8,7 +8,7 @@ packages = ["qbitwave"]
 
 [project]
 name = "qbitwave"
-version = "0.2.7"
+version = "0.2.8"
 description = "Information-theoretic reconstruction of quantum wavefunctions from discrete bitstrings"
 readme = {file = "README.md", content-type = "text/markdown"}
 requires-python = ">=3.9"
@@ -20,9 +20,8 @@ keywords = [
   "information-theory",
   "wavefunction",
   "emergent-physics",
-  "algorithmic-complexity",
-  "computational-physics",
-  "ultraviolet-regularization"
+  "minimal-spectral-length",
+  "computational-physics"
 ]
 
 
