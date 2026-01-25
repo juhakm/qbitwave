@@ -1,6 +1,22 @@
 # CHANGELOG.md
 
 
+## Version 0.2.7 — 2026-01-24
+
+- New method `observer_bit_count(threshold: float = 1e-3)` in `QBitwave` class:
+  - Computes the effective number of bits \(k\) required to specify an observer
+    in the wavefunction representation.
+  - Threshold parameter allows filtering of negligible amplitude components.
+  - Supports exact combinatorial probability calculations for observer configurations.
+  - Fully integrates with `bitstring` ↔ `wavefunction` mapping.
+- Unit test `test_observer_bit_count` added to `test_qbitwave.py`:
+  - Validates behavior for structured, random, and edge-case bitstrings.
+  - Confirms threshold-dependent behavior.
+  - Ensures returned value is consistent, non-negative, and integer.
+
+
+
+
 ## Version 0.2.6 — **Fixes to docstrings**:
 
 - Obsolete parameter from mutate() method removed

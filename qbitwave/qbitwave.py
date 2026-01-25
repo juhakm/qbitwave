@@ -457,3 +457,29 @@ class QBitwave:
         # 3. Guard against negative zero artifacts and return float
         return float(max(0.0, entropy))
     
+
+    def observer_bit_count(self, threshold: float = 1e-3) -> int:
+        """
+        Count the effective number of bits required to specify the observer
+        in this wavefunction representation.
+
+        Args:
+            threshold (float): Minimal normalized amplitude squared to consider
+                               a bit “active”. Defaults to 1e-3.
+
+        Returns:
+            int: Effective observer bit count k.
+        """
+        if len(self.amplitudes) == 0:
+            return 0
+
+        # 1. Compute normalized amplitude probabilities
+        probs = np.abs(self.amplitudes) ** 2
+        probs /= np.sum(probs)
+
+        # 2. Count number of amplitudes with non-negligible probability
+        significant = np.sum(probs > threshold)
+
+        # 3. Convert to approximate number of bits using log2
+        k = int(np.ceil(np.log2(significant + 1)))  # +1 to avoid log2(0)
+        return max(1, k)
