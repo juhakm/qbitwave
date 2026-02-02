@@ -13,19 +13,17 @@ keywords:
   - quantum field theory
   - information theory
   - wavefunction emergence
-  - algorithmic compression
-  - ultraviolet regularization
+  - spectral compression
   - computational physics
 abstract: >
   QBitwave is a Python framework for reconstructing quantum wavefunctions
   from discrete bitstring configurations using information-theoretic
   compression principles. The wavefunction is treated as an emergent,
   minimal (or near-minimal) program encoding the underlying configuration,
-  with amplitude norms defining physical measure. The framework provides
-  a natural suppression of ultraviolet divergences without imposing
-  external cutoffs, and is intended for research in quantum foundations,
+  with amplitude norms defining physical measure. The framework is intended 
+  for research in quantum foundations,
   information-theoretic physics, and computational field theory.
-version: "0.1.0"
+version: "0.2.0"
 date-released: "2025-01-01"
 preferred-citation:
   type: software

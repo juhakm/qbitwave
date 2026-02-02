@@ -1,5 +1,12 @@
 # CHANGELOG.md
 
+## Version 0.2.10 — 2026-02-02
+
+- Minor changes to README 
+
+## Version 0.2.9 — 2026-01-29
+
+- New method _analyze_bitstring_1to1(self) added
 
 ## Version 0.2.8 — 2026-01-24
 

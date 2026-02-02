@@ -13,15 +13,15 @@ behavior into a single information-centric framework.
 ### QBitwave
 
 `QBitwave` treats the wavefunction as an **emergent, information-theoretic object**.  
-A finite bitstring encodes a discretized wavefunction, which can be reconstructed as normalized complex amplitudes — the **minimal program
-reproducing the bitstring** (Kolmogorov complexity perspective).
+A finite bitstring encodes a discretized wavefunction, which can be reconstructed as normalized complex amplitudes — the **minimal description
+reproducing the bitstring**. This Spectral Complexity is both computable and continuous.
 
 **Fundamental principles:**
 
 - Compression = quantum probability amplitude = predictability
 - Smooth, regular data compresses well → high amplitude in few Fourier components (low entropy)
 - Random/noisy data is incompressible → low amplitude concentration
-- Wavefunction = minimal program reproducing the bitstring
+- Wavefunction = minimal description reproducing the bitstring
 
 **Features:**
 
@@ -75,14 +75,12 @@ reproducing the bitstring** (Kolmogorov complexity perspective).
 - `evaluate(*coords, t=0.0)` : compute ψ(x, t) at arbitrary coordinates  
 - `probability(*coords, t=0.0)` : return |ψ(x, t)|² (Born-rule analog)  
 
-## Why It Matters
 
-- Information as primary ontology: All physical phenomena are encoded by minimal informational descriptions; spacetime, fields, and quantum dynamics are derived, not assumed.
-- Compressibility replaces renormalization: High-frequency modes that contribute divergences in conventional QFT are interpreted as incompressible configurations with vanishing physical measure, providing a natural regularization.
-- Singularities as structureless limits: Zero execution-trace entropy indicates collapse of all distinguishable geometric degrees of freedom, eliminating the need to treat singularities as breakdowns of physics.
 
 ## Source code
+
 - https://github.com/juhakm/qbitwave
+
 
 ## Example Usage
 

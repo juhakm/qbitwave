@@ -7,7 +7,7 @@ as an emergent, information-theoretic object. The bitstring is a
 discretized representation of the wavefunction, and the wavefunction
 can be recovered as the minimal, normalized complex amplitudes. 
 
-From an algorithmic information perspective, the wavefunction
+From an information theoretic perspective, the wavefunction
 represents the spectral description reproducing the bitstring.
 
 Fundamental principle:
@@ -458,3 +458,20 @@ class QBitwave:
         # 3. Guard against negative zero artifacts and return float
         return float(max(0.0, entropy))
     
+    def _analyze_bitstring_1to1(self) -> None:
+        """
+        Map each bit to a single amplitude in [-1, 1].
+        This preserves spatial structure and matches the LxL grid.
+        """
+        if self.bitstring is None or len(self.bitstring) == 0:
+            self.amplitudes = np.zeros(0, dtype=np.complex64)
+            return
+
+        bits = np.array(self.bitstring, dtype=np.uint8)
+        amps_real = bits * 2 - 1  # 0->-1, 1->+1
+        # Normalize
+        norm = np.linalg.norm(amps_real)
+        if norm > 0:
+            amps_real = amps_real / norm
+
+        self.amplitudes = amps_real.astype(np.complex64)
