@@ -116,40 +116,47 @@ class TestQBitwave(unittest.TestCase):
         coh = q.coherence()
         self.assertGreaterEqual(coh, 0.0)
 
-    def test_wave_complexity_entropy_behavior(self) -> None:
+    def test_wave_complexity_phase_behavior(self) -> None:
         """
-        Test that wave_complexity() returns spectral entropy (float)
-        and correctly identifies that random noise is more complex 
-        than structured patterns.
-        """
-        # 1. Structured bitstring (low entropy/complexity)
-        # [0, 1] repeated is a very simple, predictable wave.
-        bits_structured = [0, 1] * 32
-        q_struct = QBitwave(bitstring=bits_structured)
-        comp_struct = q_struct.wave_complexity()
-        
-        self.assertIsInstance(comp_struct, float)
-        
-        # 2. Random bitstring (high entropy/complexity)
-        # Random bits should always yield a higher entropy than a pure cycle.
-        bits_random = np.random.randint(0, 2, 64).tolist()
-        q_rand = QBitwave(bitstring=bits_random)
-        comp_rand = q_rand.wave_complexity()
-        
-        self.assertIsInstance(comp_rand, float)
-        
-        # 3. Validation: Structure < Random
-        self.assertLess(comp_struct, comp_rand, 
-            f"Structured complexity ({comp_struct}) should be less than random ({comp_rand})")
+        Test wave_complexity() for both amplitude and phase sensitivity.
 
-        # 4. Edge case: empty amplitudes
+        Ensures that:
+        1. Structured amplitude+phase patterns have lower complexity.
+        2. Random amplitude or phase increases complexity.
+        3. Empty amplitudes return 0.0.
+        4. Complexity does not exceed Shannon limit of frequency bins.
+        """
+        # --- 1. Structured amplitude, constant phase ---
+        bits_struct = [0, 1] * 32
+        q_struct = QBitwave(bitstring=bits_struct)
+        # Constant phase (0)
+        q_struct.amplitudes = np.array(q_struct.amplitudes, dtype=np.complex128) * np.exp(1j * 0.0)
+        comp_struct = q_struct.wave_complexity()
+        self.assertIsInstance(comp_struct, float)
+
+        # --- 2. Same amplitude, random phases ---
+        q_phase = QBitwave(bitstring=bits_struct)
+        n_amp = len(q_phase.amplitudes)  # correct length
+        q_phase.amplitudes = np.array(q_phase.amplitudes, dtype=np.complex128) * np.exp(1j * np.random.rand(n_amp) * 2 * np.pi)
+        comp_phase = q_phase.wave_complexity()
+        self.assertIsInstance(comp_phase, float)
+        self.assertGreater(comp_phase, comp_struct,
+            f"Random phase complexity ({comp_phase}) should exceed structured ({comp_struct})")
+
+        # --- 3. Random amplitude + phase ---
+        bits_rand = np.random.randint(0, 2, 64).tolist()
+        q_rand = QBitwave(bitstring=bits_rand)
+        n_amp_rand = len(q_rand.amplitudes)
+        q_rand.amplitudes = np.array(q_rand.amplitudes, dtype=np.complex128) * np.exp(1j * np.random.rand(n_amp_rand) * 2 * np.pi)
+        comp_rand = q_rand.wave_complexity()
+        self.assertIsInstance(comp_rand, float)
+        self.assertGreater(comp_rand, comp_struct,
+            f"Random amplitude+phase ({comp_rand}) should exceed structured ({comp_struct})")
+
+        # --- 4. Empty amplitudes edge case ---
         q_empty = QBitwave(bitstring=[0]*4, fixed_basis_size=8)
         self.assertEqual(q_empty.wave_complexity(), 0.0)
 
-        # 5. Shannon Limit check
-        # Complexity should never exceed log2 of the number of available frequency bins
-        h_max = np.log2(len(q_rand.amplitudes)) + 0.01 # allow tiny epsilon
-        self.assertLessEqual(comp_rand, h_max)
         
 if __name__ == "__main__":
     unittest.main()

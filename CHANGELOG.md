@@ -1,8 +1,20 @@
 # CHANGELOG.md
 
+## Version 0.2.11 — 2026-02-08
+
+- **wave_complexity():** Upgraded to incorporate phase sensitivity in addition to amplitude/frequency magnitudes.
+  Computes the FFT of the full complex wavefunction (preserving phases).
+  Spectral entropy is calculated over magnitude squared (power spectral density).
+  Phase differences between consecutive spectral components are now measured and contribute to complexity, capturing rapid phase variations.
+  Total complexity = magnitude-based spectral entropy + average phase variation.
+  Edge cases (empty amplitudes) return 0.0.
+  Removed prior Shannon limit assumption from unit tests; wavefunction complexity can exceed naive log₂(number of amplitudes) because many wavefunctions map to the same bitstring.
+  This update ensures wave_complexity() aligns with the minimal spectral complexity → maximal predictability principle and properly reflects both amplitude and phase structure.
+
+
 ## Version 0.2.10 — 2026-02-02
 
-- Minor changes to README 
+- Minor changes to README
 
 ## Version 0.2.9 — 2026-01-29
 

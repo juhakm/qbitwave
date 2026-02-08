@@ -1,11 +1,19 @@
 # QBitwave: Emergent Information-Theoretic Wavefunctions
 
 QBitwave models quantum-like dynamics as the deterministic evolution of compressibility in finite bitstrings.
-The wavefunction ψ is interpreted not as a physical field but as the minimal compression algorithm that
+The wavefunction ψ is interpreted not as a physical field but as the minimal spectral representation that
 reproduces a given informational state.
 Existence corresponds to compressibility — most compressible configurations dominate.
 Through Fourier-domain transformations and entropy measures, QBitwave unifies bitstrings, complex amplitudes, and probabilistic
 behavior into a single information-centric framework.
+
+## Source code and related projects
+
+- https://github.com/juhakm/qbitwave
+
+## Theory
+
+- https://github.com/juhameskanen/abstract
 
 
 ## Core Concept
@@ -34,7 +42,8 @@ reproducing the bitstring**. This Spectral Complexity is both computable and con
 
 ### QBitwaveND
 
-`QBitwaveND` generalizes `QBitwave` to **N-dimensional continuous fields** and allows **dynamical evolution in time**.  
+Experimental. `QBitwaveND` generalizes `QBitwave` to **N-dimensional continuous fields** and allows **dynamical evolution in time**.  
+
 
 | Conceptual Relation |
 |--------------------|
@@ -53,7 +62,6 @@ reproducing the bitstring**. This Spectral Complexity is both computable and con
 **Interpretation:**
 
 - Time is an informational parameter — the **phase evolution of encoded structure**
-- Bridges algorithmic information (Kolmogorov domain) and spacetime dynamics (Fourier domain)
 - Provides **unitary time evolution over emergent informational geometry**, extending static ψ(x) of `QBitwave` to ψ(x, t)
 
 **Attributes:**
@@ -75,11 +83,6 @@ reproducing the bitstring**. This Spectral Complexity is both computable and con
 - `evaluate(*coords, t=0.0)` : compute ψ(x, t) at arbitrary coordinates  
 - `probability(*coords, t=0.0)` : return |ψ(x, t)|² (Born-rule analog)  
 
-
-
-## Source code
-
-- https://github.com/juhakm/qbitwave
 
 
 ## Example Usage

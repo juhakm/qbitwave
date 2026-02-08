@@ -438,25 +438,37 @@ class QBitwave:
     def wave_complexity(self) -> float:
         """
         Compute the spectral complexity of the wavefunction using Shannon Entropy,
-        that is, minimal spectral length (MSL)
-        
-        This aligns the informational cost with the Euclidean Action.
+        i.e., minimal spectral length (MSL).
+
+        Complexity increases if either frequency magnitudes or relative phases change rapidly.
         Returns:
             float: Spectral entropy in bits.
         """
-        if len(self.amplitudes) == 0: 
+        if len(self.amplitudes) == 0:
             return 0.0
-            
-        # 1. Focus on the frequency domain (The Wavefunction)
-        fft_coeffs = np.fft.rfft(self.amplitudes.real)
+
+        # 1. FFT of the full complex wavefunction (real + imaginary)
+        fft_coeffs = np.fft.fft(self.amplitudes)  # complex FFT, preserves phase info
+
+        # 2. Power spectral density (magnitude squared)
         psd = np.abs(fft_coeffs)**2
-        psd_norm = psd / (np.sum(psd) + 1e-12)
-        
-        # 2. Compute entropy: H = -sum(p * log2(p))
+        psd_norm = psd / (np.sum(psd) + 1e-12)  # normalize to form probability distribution
+
+        # 3. Shannon entropy over spectral distribution
         entropy = -np.sum(psd_norm * np.log2(psd_norm + 1e-12))
-        
-        # 3. Guard against negative zero artifacts and return float
-        return float(max(0.0, entropy))
+
+        # 4. Optional: phase complexity contribution
+        #    Compute phase differences between consecutive FFT components
+        phases = np.angle(fft_coeffs)
+        phase_diffs = np.diff(phases)
+        # normalize to [-pi, pi]
+        phase_diffs = (phase_diffs + np.pi) % (2 * np.pi) - np.pi
+        phase_complexity = np.sum(np.abs(phase_diffs)) / len(phase_diffs)  # average phase variation
+
+        # 5. Combine magnitude and phase contributions
+        total_complexity = entropy + phase_complexity
+
+        return float(max(0.0, total_complexity))
     
     def _analyze_bitstring_1to1(self) -> None:
         """
