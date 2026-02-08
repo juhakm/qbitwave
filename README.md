@@ -1,43 +1,42 @@
-# QBitwave: Emergent Information-Theoretic Wavefunctions
+# QBitwave
 
-QBitwave models quantum-like dynamics as the deterministic evolution of compressibility in finite bitstrings.
-The wavefunction ψ is interpreted not as a physical field but as the minimal spectral representation that
-reproduces a given informational state.
-Existence corresponds to compressibility — most compressible configurations dominate.
-Through Fourier-domain transformations and entropy measures, QBitwave unifies bitstrings, complex amplitudes, and probabilistic
-behavior into a single information-centric framework.
+Python class to model quantum-like dynamics as the deterministic evolution of compressibility in finite bitstrings.
 
-## Source code and related projects
+## Install
 
-- https://github.com/juhakm/qbitwave
+```
+pip install qbitwave
+```
 
-## Theory
+[https://pypi.org/project/qbitwave/](https://pypi.org/project/qbitwave/)
 
-- https://github.com/juhameskanen/abstract
+## Description
 
+The wavefunction ψ is interpreted not as a physical field but as the minimal compression algorithm that reproduces a given informational state.
+Existence corresponds to compressibility — the most compressible configurations dominate.
 
-## Core Concept
+A **finite bitstring** encodes a discretized wavefunction, which can be reconstructed as normalized complex amplitudes.
+Conceptually, the bitstring is like a “measurement” of the wavefunction: **many wavefunctions may correspond to the same bitstring**, but each wavefunction carries richer structure in amplitude and phase.
 
-### QBitwave
+Through Fourier-domain transformations and entropy measures, QBitwave unifies **bitstrings, complex amplitudes, and probabilistic behavior** into a single information-centric framework.
 
-`QBitwave` treats the wavefunction as an **emergent, information-theoretic object**.  
-A finite bitstring encodes a discretized wavefunction, which can be reconstructed as normalized complex amplitudes — the **minimal description
-reproducing the bitstring**. This Spectral Complexity is both computable and continuous.
+## Fundamental Principles
 
-**Fundamental principles:**
-
-- Compression = quantum probability amplitude = predictability
+- **Compression → quantum probability amplitude → predictability** (smooth, emergent laws of physics)
 - Smooth, regular data compresses well → high amplitude in few Fourier components (low entropy)
 - Random/noisy data is incompressible → low amplitude concentration
-- Wavefunction = minimal description reproducing the bitstring
+- **Wavefunction = minimal spectral description reproducing the bitstring**
+- Phase structure contributes to wavefunction complexity; rapid phase variation increases informational cost
 
-**Features:**
+## Features
 
-- Forward mapping: wavefunction → bitstring
-- Reverse mapping: bitstring → minimal wavefunction
+- Forward mapping: **wavefunction → bitstring**
+- Reverse mapping: **bitstring → minimal complex wavefunction**
+- Phase-aware spectral complexity measure (`wave_complexity()`)
 - Block-size selection via entropy maximization
 - Shannon entropy computation
 - Fourier-based compressibility measure reflecting structure
+- Deterministic evolution driven by minimal spectral complexity
 
 
 ### QBitwaveND
