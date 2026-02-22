@@ -39,6 +39,11 @@ Through Fourier-domain transformations and entropy measures, QBitwave unifies **
 - Deterministic evolution driven by minimal spectral complexity
 
 
+### QBitwaveMDL
+
+This is new rewritten version of QBitwave, with refined spectral complexity measure and old experimental and legacy code stripped.
+
+
 ### QBitwaveND
 
 Experimental. `QBitwaveND` generalizes `QBitwave` to **N-dimensional continuous fields** and allows **dynamical evolution in time**.  

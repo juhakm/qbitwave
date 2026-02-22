@@ -1,5 +1,11 @@
 # CHANGELOG.md
 
+
+## Version 0.3.1 — 2026-02-21
+
+- **qbitwave_mdl.py** - New rewritten version of QBitwave, without legacy code, and refined spectral complexity measure.
+
+
 ## Version 0.2.11 — 2026-02-08
 
 - **wave_complexity():** Upgraded to incorporate phase sensitivity in addition to amplitude/frequency magnitudes.
