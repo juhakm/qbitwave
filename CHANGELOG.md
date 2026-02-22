@@ -1,6 +1,14 @@
 # CHANGELOG.md
 
 
+## Version 0.3.2 — 2026-02-21
+
+Fixes to **qbitwave_mdl.py**:
+- Refactorized to use floats internally to avoid ackward 1000 scale in phase.
+- evaluate() returns phase [0..2 * PI]
+
+
+
 ## Version 0.3.1 — 2026-02-21
 
 - **qbitwave_mdl.py** - New rewritten version of QBitwave, without legacy code, and refined spectral complexity measure.
