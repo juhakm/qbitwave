@@ -3,15 +3,16 @@ qbitwave_mdl.py
 
 Finite spectral informational model (QBitwave).
 
-Wavefunction is represented as a finite spectral set:
+Wavefunctions are represented as a finite spectral set:
 
     {(k_i, A_i, phi_i)}
 
-k_i : integer frequency index in Z_N
-A_i : real amplitude
-phi_i : phase in radians
+where:
+    k_i   : integer frequency index in Z_N
+    A_i   : real amplitude
+    phi_i : phase in radians
 
-Complexity functional:
+Structural complexity functional:
 
     C_Q = sum (k_eff^2 * |A_i|^2)
 
@@ -23,31 +24,35 @@ Phase does not contribute to structural complexity
 by design (amplitude-dominant informational model).
 """
 
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 import numpy as np
 
 
 class QBitwaveMDL:
-    """Finite spectral history encoding with genuine complex wavefunction."""
+    """Finite spectral history encoding with a genuine complex wavefunction.
+
+    This class is the *sole owner* of:
+    - FFT-based encoding
+    - Spectral complexity (MDL cost)
+    - k-weighted power spectra
+
+    No external class should perform FFTs directly.
+    """
 
     def __init__(self, N: int):
         """
         Args:
-            N: Size of discrete spatial domain (Z_N).
+            N: Maximum number of spectral modes (Z_N domain).
         """
-        self.N = N
+        self.N = int(N)
         self.modes: List[Tuple[int, float, float]] = []
 
-    # ------------------------------------------------------------------
-    # Mode Management
-    # ------------------------------------------------------------------
 
     def add_mode(self, k: int, A: float, phi: float) -> None:
-        """
-        Adds spectral mode.
+        """Adds a spectral mode.
 
         Args:
-            k: Integer frequency index (Z_N).
+            k: Integer frequency index.
             A: Real amplitude.
             phi: Phase in radians.
         """
@@ -56,66 +61,118 @@ class QBitwaveMDL:
 
     def clear_modes(self) -> None:
         """Removes all spectral modes."""
-        self.modes = []
+        self.modes.clear()
 
-    # ------------------------------------------------------------------
-    # Structural Complexity (Compression Functional)
-    # ------------------------------------------------------------------
+
+    def encode_complex_signal(
+        self,
+        z: np.ndarray,
+        amplitude_threshold: float = 1e-10
+    ) -> None:
+        """Encodes a complex-valued signal into spectral modes via FFT.
+
+        This is the *canonical* entry point for trajectory encoding.
+
+        Args:
+            z: Complex signal array (e.g., x + i y trajectory).
+            amplitude_threshold: Minimum amplitude to retain a mode.
+        """
+        self.clear_modes()
+
+        if z is None or len(z) < 2:
+            return
+
+        fft_vals = np.fft.fft(z)
+        N_fft = len(fft_vals)
+
+        for k, coeff in enumerate(fft_vals):
+            A = np.abs(coeff)
+            if A < amplitude_threshold:
+                continue
+
+            phi = np.angle(coeff)
+            self.add_mode(k % self.N, A, phi)
+
 
     def spectral_complexity(self) -> float:
+        """Computes structural (MDL) complexity.
+
+        Definition:
+            C_Q = sum_k (k_eff^2 * |A_k|^2)
+
+        where:
+            k_eff = min(k, N - k)
+
+        Returns:
+            Scalar complexity cost.
         """
-        Computes structural complexity.
-
-        C_Q = sum (k_eff^2 * |A|^2)
-
-        where k_eff is minimal frequency distance in Z_N.
-        """
-
         total = 0.0
 
         for k, A, _ in self.modes:
-            k_eff = min(abs(k), self.N - abs(k))
-            total += (k_eff ** 2) * (abs(A) ** 2)
+            k_eff = min(k, self.N - k)
+            total += (k_eff ** 2) * (A ** 2)
 
         return total
 
-    # ------------------------------------------------------------------
-    # Optional Bit-Length Model (If Needed)
-    # ------------------------------------------------------------------
+
+    def spectrum(self):
+        """Returns the weighted spectral power distribution.
+
+        Returns:
+            k_eff (np.ndarray): Effective frequency indices.
+            weighted_power (np.ndarray): k_eff^2 * |A_k|^2
+            raw_power (np.ndarray): |A_k|^2
+        """
+        if not self.modes:
+            return None, None, None
+
+        ks = np.array([k for k, _, _ in self.modes], dtype=int)
+        amps = np.array([A for _, A, _ in self.modes], dtype=float)
+
+        k_eff = np.minimum(ks, self.N - ks)
+        raw_power = amps ** 2
+        weighted = (k_eff ** 2) * raw_power
+
+        return k_eff, weighted, raw_power
+
 
     @staticmethod
     def bits_estimate(x: float, eps: float = 1e-12) -> float:
-        """
-        Rough description length estimate for real number.
+        """Estimates description length of a real number.
 
-        Not literal Shannon coding — just logarithmic scale cost.
+        This is a logarithmic proxy for MDL-style encoding cost.
+
+        Args:
+            x: Value to encode.
+            eps: Numerical stabilizer.
+
+        Returns:
+            Approximate bit cost.
         """
-        return np.log2(1 + abs(x) + eps)
+        return np.log2(1.0 + abs(x) + eps)
 
     def description_length_estimate(self) -> float:
-        """
-        Optional MDL-style description length.
+        """Estimates total description length of the spectrum.
 
-        Estimates bits needed to encode (k, A, phi).
+        Returns:
+            Approximate number of bits to encode all modes.
         """
         total = 0.0
 
         for k, A, phi in self.modes:
-            total += np.log2(1 + abs(k))
+            total += np.log2(1.0 + abs(k))
             total += self.bits_estimate(A)
             total += self.bits_estimate(phi)
 
         return total
 
-    # ------------------------------------------------------------------
-    # Wavefunction Evaluation
-    # ------------------------------------------------------------------
-
+    
     def evaluate(self) -> np.ndarray:
-        """
-        Evaluates discrete complex wavefunction ψ(x).
-        """
+        """Evaluates the discrete complex wavefunction ψ(x).
 
+        Returns:
+            Complex-valued array of length N.
+        """
         x_vals = np.arange(self.N)
         psi = np.zeros(self.N, dtype=complex)
 
@@ -125,36 +182,30 @@ class QBitwaveMDL:
 
         return psi
 
-    # ------------------------------------------------------------------
-    # Born Rule Probabilities
-    # ------------------------------------------------------------------
 
     def probabilities(self) -> np.ndarray:
-        """
-        Computes normalized Born probabilities:
+        """Computes normalized Born-rule probabilities.
 
-            P(x) = |ψ(x)|^2 / sum_x |ψ(x)|^2
+        Returns:
+            Probability distribution over x ∈ Z_N.
         """
-
         psi = self.evaluate()
         prob = np.abs(psi) ** 2
-        total = np.sum(prob)
+        s = prob.sum()
 
-        if total == 0:
+        if s <= 0:
             return np.ones(self.N) / self.N
 
-        return prob / total
+        return prob / s
 
-    # ------------------------------------------------------------------
-    # Typicality Weight
-    # ------------------------------------------------------------------
 
     def typicality_weight(self, lam: float = 1.0) -> float:
-        """
-        Computes statistical weight:
+        """Computes typicality weight exp(-λ C_Q).
 
-            exp(-λ C_Q)
-        """
+        Args:
+            lam: Inverse temperature / compression strength.
 
-        C_Q = self.spectral_complexity()
-        return np.exp(-lam * C_Q)
+        Returns:
+            Statistical weight.
+        """
+        return np.exp(-lam * self.spectral_complexity())

@@ -1,12 +1,19 @@
 # CHANGELOG.md
 
+## Version 0.3.3 — 2026-03-01
+
+New methods added to **qbitwave_mdl.py**.
+- **typicality_weight():** Computes typicality weight exp(-λ C_Q).
+- **probabilities():** Computes normalized Born-rule probabilitie
+- **evaluate():** Evaluates discrete complex wavefunction ψ(x).
+- **description_length_estimate():** Estimates total description length of the spectrum.
+
 
 ## Version 0.3.2 — 2026-02-21
 
 Fixes to **qbitwave_mdl.py**:
 - Refactorized to use floats internally to avoid ackward 1000 scale in phase.
 - evaluate() returns phase [0..2 * PI]
-
 
 
 ## Version 0.3.1 — 2026-02-21
