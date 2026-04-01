@@ -36,19 +36,19 @@ class TestQBitwaveMDL(unittest.TestCase):
     def test_encode_complex_signal_basic(self):
         """FFT encoding should populate modes for a valid signal."""
         z = np.array([1 + 1j, -1 - 1j, 1 + 1j, -1 - 1j])
-        self.model.encode_complex_signal(z)
+        self.model.encode(z)
         self.assertGreater(len(self.model.modes), 0)
 
     def test_encode_complex_signal_short_input(self):
         """Signals shorter than length 2 should produce no modes."""
         z = np.array([1 + 1j])
-        self.model.encode_complex_signal(z)
+        self.model.encode(z)
         self.assertEqual(len(self.model.modes), 0)
 
     def test_encode_complex_signal_threshold(self):
         """Amplitude threshold should suppress near-zero modes."""
         z = np.zeros(8, dtype=complex)
-        self.model.encode_complex_signal(z, amplitude_threshold=1e-6)
+        self.model.encode(z, amplitude_threshold=1e-6)
         self.assertEqual(len(self.model.modes), 0)
 
     # -- Structural Complexity --

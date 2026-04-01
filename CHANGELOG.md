@@ -1,5 +1,56 @@
 # CHANGELOG.md
 
+## Version 0.3.4 — 2026-04-01
+
+### Added
+
+- Introduced new abstract base class **`SpectralFieldMDL`**, providing a unified interface and shared functionality for spectral-domain informational models.
+  - Establishes a common foundation for encoding, evaluating, and analyzing spectral representations.
+  - Enables consistent extension across multiple model types (e.g., QBitWave and QBitSpinor).
+
+- Added new class **`QBitSpinor`** (`qbitspinor.py`), implementing a two-component spectral spinor model:
+  - Represents spinor states as coupled spectral components (alpha, beta).
+  - Supports complex-valued mode encoding via FFT.
+  - Includes:
+    - Spectral encoding with amplitude thresholding
+    - Structural complexity measure (`spectral_complexity`)
+    - Wavefunction reconstruction (`evaluate`)
+    - Bloch vector extraction (`get_bloch_vectors`)
+    - MDL-based description length estimation
+    - Typicality weighting based on complexity
+
+- Added comprehensive unit tests for **`QBitSpinor`** (`test_qbitspinor.py`), covering:
+  - Initialization and mode management
+  - Encoding behavior and thresholding
+  - Error handling for invalid inputs
+  - Spectral complexity correctness
+  - Wavefunction evaluation and normalization
+  - Bloch vector computation and bounds
+  - Description length estimation
+  - Typicality weighting behavior
+
+### Changed
+
+- Refactored spectral model architecture to align **`QBitwaveMDL`** and **`QBitSpinor`** under the shared **`SpectralFieldMDL`** base class.
+  - Improves code reuse and enforces a consistent API across spectral models.
+  - Standardizes encoding and evaluation patterns.
+
+- Updated encoding logic to support **robust handling of short or degenerate signals**, ensuring models produce empty mode sets instead of raising exceptions.
+
+- Ensured all stored spectral coefficients are explicitly treated as **complex values**, preventing unintended real-valued coercion during unit tests and numerical operations.
+
+### Fixed
+
+- Resolved issue where short input signals caused exceptions instead of producing empty spectral representations.
+- Fixed improper handling of complex values in mode storage, ensuring compatibility with complex-number assertions in unit tests.
+- Addressed inconsistencies between encoding logic and test expectations regarding thresholding and normalization.
+
+### Notes
+
+- This release strengthens the foundation for higher-level informational and physical modeling using spectral methods.
+- The introduction of a shared base class improves extensibility and prepares the framework for additional model types.
+
+
 ## Version 0.3.3 — 2026-03-01
 
 New methods added to **qbitwave_mdl.py**.

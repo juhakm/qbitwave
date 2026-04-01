@@ -26,9 +26,9 @@ by design (amplitude-dominant informational model).
 
 from typing import List, Tuple, Optional
 import numpy as np
+from .spectral_field_mdl import SpectralFieldMDL
 
-
-class QBitwaveMDL:
+class QBitwaveMDL(SpectralFieldMDL):
     """Finite spectral history encoding with a genuine complex wavefunction.
 
     This class is the *sole owner* of:
@@ -64,35 +64,81 @@ class QBitwaveMDL:
         self.modes.clear()
 
 
-    def encode_complex_signal(
+    def encode(
         self,
         z: np.ndarray,
-        amplitude_threshold: float = 1e-10
+        amplitude_threshold: float = 1e-10,
+        normalize: bool = False
     ) -> None:
-        """Encodes a complex-valued signal into spectral modes via FFT.
+        """
+        Encodes a complex-valued signal into spectral modes using FFT.
 
-        This is the *canonical* entry point for trajectory encoding.
+        This is the canonical encoding method for scalar (wavefunction-like)
+        fields. It converts a spatial-domain signal into a compressed spectral
+        representation:
+
+            z(x) → {(k, A_k, φ_k)}
+
+        where:
+            k     : frequency index (mod N)
+            A_k   : amplitude (|FFT coefficient|)
+            φ_k   : phase (angle of coefficient)
+
+        Small-amplitude modes are discarded to enforce compression.
 
         Args:
-            z: Complex signal array (e.g., x + i y trajectory).
-            amplitude_threshold: Minimum amplitude to retain a mode.
+            z (np.ndarray):
+                Complex-valued input signal of shape (M,).
+                Typically represents a trajectory or wavefunction.
+
+            amplitude_threshold (float, optional):
+                Minimum amplitude required to retain a spectral mode.
+                Modes below this threshold are discarded.
+                Defaults to 1e-10.
+
+            normalize (bool, optional):
+                If True, normalizes the signal before encoding so that
+                total power is 1. This can improve comparability between
+                different signals. Defaults to False.
+
+        Raises:
+            ValueError:
+                If input is invalid or too short.
         """
         self.clear_modes()
 
         if z is None or len(z) < 2:
+            self.clear_modes()
             return
 
+        z = np.asarray(z, dtype=complex)
+
+        # Optional normalization (useful for probabilistic interpretation)
+        if normalize:
+            norm = np.sqrt(np.sum(np.abs(z) ** 2))
+            if norm > 0:
+                z = z / norm
+
+        # Compute FFT
         fft_vals = np.fft.fft(z)
         N_fft = len(fft_vals)
 
+        # Encode modes
         for k, coeff in enumerate(fft_vals):
             A = np.abs(coeff)
+
+            # Compression: discard negligible modes
             if A < amplitude_threshold:
                 continue
 
             phi = np.angle(coeff)
-            self.add_mode(k % self.N, A, phi)
 
+            # Map into Z_N domain
+            k_mod = k % self.N
+
+            self.add_mode(k_mod, A, phi)
+
+    
 
     def spectral_complexity(self) -> float:
         """Computes structural (MDL) complexity.
