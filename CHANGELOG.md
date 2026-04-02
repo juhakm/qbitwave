@@ -1,6 +1,7 @@
 # CHANGELOG.md
 
-## Version 0.3.4 — 2026-04-01
+
+## Version 0.3.5 — 2026-04-02
 
 ### Added
 

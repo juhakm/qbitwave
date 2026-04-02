@@ -44,6 +44,101 @@ Through Fourier-domain transformations and entropy measures, QBitwave unifies **
 This is new rewritten version of QBitwave, with refined spectral complexity measure and old experimental and legacy code stripped.
 
 
+
+### QBitSpinor
+
+`QBitSpinor` extends the spectral informational framework to **two-component spinor fields**, enabling representation of internal degrees of freedom (analogous to spin-½ systems) within the same MDL-based formalism.
+
+While `QBitwaveMDL` models a scalar complex field ψ(x), `QBitSpinor` models a **vector-valued wavefunction**:
+
+ψ(x) = (ψₐ(x), ψᵦ(x))
+
+Each component is encoded spectrally, and structural complexity is computed over the **combined power of both components**.
+
+| Conceptual Relation |
+|--------------------|
+| `QBitwaveMDL` → Scalar informational field |
+| `QBitSpinor` → Internal structure (spinor / identity encoding) |
+
+
+#### Interpretation
+
+- A spinor is not treated as a physical object, but as a **more expressive compression scheme**
+- Two components allow encoding of **relational or identity-preserving structure**
+- The additional degrees of freedom enable:
+  - Representation of distinguishability under compression
+  - Emergence of exclusion-like behavior (via structural constraints)
+  - Mapping to Bloch sphere representation
+
+In this framework:
+
+- **Scalar fields compress geometry**
+- **Spinors compress identity**
+
+
+
+#### Structural Complexity
+
+The spectral complexity generalizes to:
+
+C_Q = Σ k_eff² (|Aₐ(k)|² + |Aᵦ(k)|²)
+
+This reflects the total informational cost of encoding both components.
+
+
+
+#### Bloch Representation
+
+The internal structure can be mapped to a **Bloch vector**:
+
+- Ex = 2 Re(ψₐ* ψᵦ)
+- Ey = 2 Im(ψₐ* ψᵦ)
+- Ez = |ψₐ|² − |ψᵦ|²
+
+This provides a geometric interpretation of the internal state.
+
+
+
+#### Features
+
+- Two-component spectral encoding (α, β)
+- FFT-based mode extraction
+- Joint spectral complexity measure
+- Wavefunction reconstruction ψ(x) ∈ ℂ²
+- Bloch vector computation
+- MDL-based description length estimation
+- Typicality weighting via exp(-λ C_Q)
+
+
+
+#### Example Usage
+
+```python
+import numpy as np
+from qbitwave.qbitspinor import QBitSpinor
+
+N = 32
+spinor = QBitSpinor(N)
+
+# Define spinor components
+alpha = np.exp(1j * np.linspace(0, 2*np.pi, N))
+beta  = np.exp(-1j * np.linspace(0, 2*np.pi, N))
+
+# Encode into spectral modes
+spinor.encode(alpha, beta)
+
+# Evaluate wavefunction
+psi = spinor.evaluate()  # shape (N, 2)
+
+# Compute Bloch vectors
+bloch = spinor.get_bloch_vectors()
+
+# Complexity and typicality
+C = spinor.spectral_complexity()
+w = spinor.typicality_weight()
+
+
+
 ### QBitwaveND
 
 Experimental. `QBitwaveND` generalizes `QBitwave` to **N-dimensional continuous fields** and allows **dynamical evolution in time**.  
