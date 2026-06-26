@@ -3,6 +3,7 @@ from .qbitspinor import QBitSpinor
 from .qbitwave_mdl import QBitwaveMDL
 from .qbitwavend import QBitwaveND
 from .spectral_field_mdl import SpectralFieldMDL
+from .wavefunction import Wavefunction
 
 
 __all__ = [
@@ -11,4 +12,5 @@ __all__ = [
     "QBitwaveMDL",
     "QBitwaveND",
     "SpectralFieldMDL",
+    "Wavefunction"
 ]

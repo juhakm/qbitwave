@@ -1,4 +1,10 @@
-# CHANGELOG.md
+# CHANGELOG.
+
+## Version 0.3.7 — 2026-06-19
+
+### Added
+
+New class **Wavefunction** with correct spectral complexity measure.
 
 
 ## Version 0.3.5 — 2026-04-02
